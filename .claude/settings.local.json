@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(ipconfig)",
+      "Bash(npx --yes cloudflared@latest tunnel --url http://localhost:3001)",
+      "Bash(npx --yes localtunnel --port 3001)",
+      "Bash(curl -s https://api.ipify.org)",
+      "Bash(curl -s https://ifconfig.me)"
+    ]
+  }
+}

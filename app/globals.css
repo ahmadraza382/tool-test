@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-fg);
+  --color-border: var(--border-color);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-fg);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-fg);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-fg);
+  --color-surface: var(--surface);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --bg: #f8fafc;
+  --fg: #0f172a;
+  --muted: #f1f5f9;
+  --muted-fg: #64748b;
+  --border-color: #e2e8f0;
+  --card: #ffffff;
+  --card-fg: #0f172a;
+  --primary: #0ea5e9;
+  --primary-fg: #ffffff;
+  --accent: #e0f2fe;
+  --accent-fg: #0284c7;
+  --surface: #ffffff;
+}
+
+.dark {
+  --bg: #0f172a;
+  --fg: #f8fafc;
+  --muted: #1e293b;
+  --muted-fg: #94a3b8;
+  --border-color: #334155;
+  --card: #1e293b;
+  --card-fg: #f8fafc;
+  --primary: #38bdf8;
+  --primary-fg: #0f172a;
+  --accent: #0c4a6e;
+  --accent-fg: #7dd3fc;
+  --surface: #1e293b;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* Dropdown animation */
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-dropdown {
+  animation: dropdown-in 0.15s ease-out;
+}
+
+/* Mobile menu animation */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-slide-down {
+  animation: slide-down 0.2s ease-out;
+}
+
+/* Rich gradient mesh for hero */
+.hero-gradient {
+  background:
+    radial-gradient(ellipse 55% 40% at 18% 8%, rgba(14, 165, 233, 0.22), transparent 65%),
+    radial-gradient(ellipse 45% 35% at 82% 12%, rgba(56, 189, 248, 0.20), transparent 65%),
+    radial-gradient(ellipse 70% 50% at 50% 95%, rgba(99, 102, 241, 0.14), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 10% 85%, rgba(125, 211, 252, 0.16), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 95% 60%, rgba(129, 140, 248, 0.12), transparent 70%),
+    linear-gradient(180deg, rgba(240, 249, 255, 0.6) 0%, transparent 60%);
+}
+.dark .hero-gradient {
+  background:
+    radial-gradient(ellipse 55% 40% at 18% 8%, rgba(56, 189, 248, 0.28), transparent 65%),
+    radial-gradient(ellipse 45% 35% at 82% 12%, rgba(14, 165, 233, 0.22), transparent 65%),
+    radial-gradient(ellipse 70% 50% at 50% 95%, rgba(99, 102, 241, 0.18), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 10% 85%, rgba(125, 211, 252, 0.10), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 95% 60%, rgba(129, 140, 248, 0.16), transparent 70%),
+    linear-gradient(180deg, rgba(12, 74, 110, 0.35) 0%, transparent 60%);
+}
