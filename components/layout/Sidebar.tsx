@@ -73,7 +73,7 @@ export function Sidebar({ className }: { className?: string }) {
           <Wrench className="h-4 w-4 text-primary-foreground" />
         </div>
         <span className="text-lg font-bold tracking-tight text-foreground">
-          ToolboxHub
+          Tool<span className="text-primary">dit</span>
         </span>
       </Link>
 

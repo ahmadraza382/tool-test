@@ -2,9 +2,9 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Privacy Policy — ToolboxHub",
+  title: "Privacy Policy — Tooldit",
   description:
-    "How ToolboxHub handles your data. Short answer: we don't collect your files — everything runs in your browser.",
+    "How Tooldit handles your data. Short answer: we don't collect your files — everything runs in your browser.",
 };
 
 export default function PrivacyPage() {
@@ -28,8 +28,8 @@ export default function PrivacyPage() {
       <div className="mt-8 space-y-8 text-sm leading-relaxed text-foreground">
         <section>
           <p>
-            ToolboxHub (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates
-            the ToolboxHub website (the &quot;Service&quot;). This page informs
+            Tooldit (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) operates
+            the Tooldit website (the &quot;Service&quot;). This page informs
             you of our policies regarding the collection, use, and disclosure of
             information when you use our Service.
           </p>
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
           </h2>
           <p className="text-muted-foreground">
             All file processing happens locally in your browser. The files you
-            upload to any ToolboxHub tool (PDFs, images, etc.) are never
+            upload to any Tooldit tool (PDFs, images, etc.) are never
             transmitted to our servers, never stored by us, and never shared with
             any third party. Processing occurs entirely on your device using
             client-side JavaScript and WebAssembly.
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
             Third-Party Services
           </h2>
           <p className="text-muted-foreground">
-            ToolboxHub may use the following third-party services:
+            Tooldit may use the following third-party services:
           </p>
           <ul className="mt-3 list-inside list-disc space-y-1 text-muted-foreground">
             <li>

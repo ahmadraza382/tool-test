@@ -4,9 +4,9 @@ import { games } from "@/lib/games-data";
 import { cn } from "@/lib/cn";
 
 export const metadata = {
-  title: "Games — ToolboxHub",
+  title: "Games — Tooldit",
   description:
-    "Free browser games on ToolboxHub. 2048, Tetris, Snake, Sudoku and more — all private, all in your browser.",
+    "Free browser games on Tooldit. 2048, Tetris, Snake, Sudoku and more — all private, all in your browser.",
 };
 
 export default function GamesPage() {
@@ -31,7 +31,6 @@ export default function GamesPage() {
         </div>
       </div>
 
-      {/* Games grid */}
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {games.map((game) => {
           const GameIcon = game.icon;

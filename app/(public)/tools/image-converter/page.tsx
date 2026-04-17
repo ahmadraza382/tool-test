@@ -28,10 +28,7 @@ export default function ImageConverterPage() {
   const [progressLabel, setProgressLabel] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const previews = useMemo(
-    () => files.map((f) => URL.createObjectURL(f)),
-    [files]
-  );
+  const previews = useMemo(() => files.map((f) => URL.createObjectURL(f)), [files]);
 
   useEffect(() => {
     return () => previews.forEach((u) => URL.revokeObjectURL(u));
@@ -67,8 +64,7 @@ export default function ImageConverterPage() {
           const img = await new Promise<HTMLImageElement>((resolve, reject) => {
             const image = new window.Image();
             image.onload = () => resolve(image);
-            image.onerror = () =>
-              reject(new Error(`Failed to load: ${file.name}`));
+            image.onerror = () => reject(new Error(`Failed to load: ${file.name}`));
             image.src = url;
           });
 
@@ -78,7 +74,6 @@ export default function ImageConverterPage() {
           const ctx = canvas.getContext("2d");
           if (!ctx) throw new Error("Canvas context unavailable");
 
-          // JPG requires opaque background
           if (format === "jpg") {
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -89,11 +84,7 @@ export default function ImageConverterPage() {
           const q = format === "png" ? undefined : quality / 100;
 
           const blob = await new Promise<Blob>((resolve, reject) => {
-            canvas.toBlob(
-              (b) => (b ? resolve(b) : reject(new Error("toBlob failed"))),
-              mime,
-              q
-            );
+            canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), mime, q);
           });
 
           const baseName = file.name.replace(/\.[^.]+$/, "");
@@ -103,9 +94,7 @@ export default function ImageConverterPage() {
         }
 
         setProgress(Math.round(((i + 1) / files.length) * 100));
-        if (i < files.length - 1) {
-          await new Promise((r) => setTimeout(r, 250));
-        }
+        if (i < files.length - 1) await new Promise((r) => setTimeout(r, 250));
       }
 
       setProgressLabel("Done!");
@@ -155,9 +144,7 @@ export default function ImageConverterPage() {
                 alt=""
                 className="h-8 w-8 shrink-0 rounded border border-border object-cover"
               />
-              <span className="flex-1 truncate text-sm text-foreground">
-                {file.name}
-              </span>
+              <span className="flex-1 truncate text-sm text-foreground">{file.name}</span>
               <span className="hidden text-xs text-muted-foreground sm:inline">
                 {(file.size / 1024).toFixed(0)} KB
               </span>
@@ -213,9 +200,7 @@ export default function ImageConverterPage() {
       {error && (
         <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-            {error}
-          </p>
+          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
         </div>
       )}
 

@@ -2,22 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   Wrench,
   FileText,
   ImageIcon,
   Sparkles,
+  Gamepad2,
   Menu,
   X,
   ChevronDown,
   ArrowRight,
-  Gamepad2,
   Search,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SearchDialog } from "@/components/SearchDialog";
 import { tools } from "@/lib/tools-data";
 import { games } from "@/lib/games-data";
 
@@ -65,41 +66,6 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const searchRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!searchOpen) {
-      setSearchQuery("");
-      return;
-    }
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSearchOpen(false);
-    };
-    const onClick = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setSearchOpen(false);
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onClick);
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.removeEventListener("mousedown", onClick);
-    };
-  }, [searchOpen]);
-
-  const q = searchQuery.toLowerCase().trim();
-  const searchMatches = q
-    ? [
-        ...tools.map((t) => ({ ...t, kind: "tool" as const })),
-        ...games.map((g) => ({ ...g, kind: "game" as const })),
-      ].filter(
-        (item) =>
-          item.name.toLowerCase().includes(q) ||
-          item.description.toLowerCase().includes(q)
-      )
-    : [];
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-surface">
@@ -109,16 +75,12 @@ export function Navbar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-sky-400 to-sky-600 shadow-lg shadow-primary/20 sm:h-9 sm:w-9">
             <Wrench className="h-4 w-4 text-white sm:h-4.5 sm:w-4.5" />
           </div>
-          <div
-            className={cn(
-              searchOpen && "hidden sm:inline"
-            )}
-          >
+          <div>
             <span className="text-base font-bold tracking-tight text-foreground sm:text-lg">
-              Toolbox
+              Tool
             </span>
             <span className="text-base font-bold tracking-tight text-primary sm:text-lg">
-              Hub
+              dit
             </span>
           </div>
         </Link>
@@ -217,69 +179,13 @@ export function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center gap-1.5">
-          {/* Inline search */}
-          <div ref={searchRef} className="relative">
-            {searchOpen && (
-              <input
-                autoFocus
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search tools, games..."
-                className="animate-dropdown absolute right-full top-0 mr-1 h-9 w-[min(14rem,calc(100vw-7.5rem))] rounded-full border border-border bg-card px-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 sm:w-60"
-              />
-            )}
-
-            {searchOpen && searchQuery && (
-              <div className="animate-dropdown absolute right-0 top-full mt-2 max-h-[60vh] w-80 overflow-y-auto rounded-2xl border border-border bg-card p-2 shadow-xl shadow-black/10 dark:shadow-black/40">
-                {searchMatches.length === 0 ? (
-                  <div className="px-3 py-6 text-center text-xs text-muted-foreground">
-                    No results for &quot;{searchQuery}&quot;
-                  </div>
-                ) : (
-                  <div className="space-y-0.5">
-                    {searchMatches.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={`${item.kind}-${item.id}`}
-                          href={item.href}
-                          onClick={() => setSearchOpen(false)}
-                          className="flex items-center gap-3 rounded-xl px-2 py-2 text-card-foreground transition-colors hover:bg-muted"
-                        >
-                          <div
-                            className={cn(
-                              "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg",
-                              item.color
-                            )}
-                          >
-                            <Icon className="h-4 w-4" />
-                          </div>
-                          <span className="min-w-0 flex-1 truncate text-sm font-medium">
-                            {item.name}
-                          </span>
-                          <span className="hidden text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:block">
-                            {item.kind}
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <button
-              onClick={() => setSearchOpen((v) => !v)}
-              aria-label={searchOpen ? "Close search" : "Search tools and games"}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              {searchOpen ? (
-                <X className="h-4 w-4" />
-              ) : (
-                <Search className="h-4 w-4" />
-              )}
-            </button>
-          </div>
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search tools and games"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <Search className="h-4 w-4" />
+          </button>
 
           <ThemeToggle />
 
@@ -321,6 +227,12 @@ export function Navbar() {
           />
         </>
       )}
+
+      {/* Search dialog — modal overlay */}
+      <SearchDialog
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+      />
     </nav>
   );
 }

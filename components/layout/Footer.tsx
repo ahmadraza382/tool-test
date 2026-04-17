@@ -18,12 +18,11 @@ export function Footer() {
                 <Wrench className="h-4 w-4 text-white" />
               </div>
               <span className="text-base font-bold text-foreground">
-                Toolbox<span className="text-primary">Hub</span>
+                Tool<span className="text-primary">dit</span>
               </span>
             </Link>
           </div>
 
-          {/* PDF Tools */}
           <div>
             <h4 className="mb-3 text-sm font-semibold text-foreground">
               PDF Tools
@@ -42,7 +41,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Image Tools */}
           <div>
             <h4 className="mb-3 text-sm font-semibold text-foreground">
               Image Tools
@@ -61,7 +59,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* AI + More */}
           <div>
             <h4 className="mb-3 text-sm font-semibold text-foreground">
               AI Tools
@@ -82,7 +79,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col items-center gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:mt-10 sm:flex-row sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} ToolboxHub.</p>
+          <p>&copy; {new Date().getFullYear()} Tooldit.</p>
           <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <Link
               href="/privacy"

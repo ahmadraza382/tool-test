@@ -31,7 +31,7 @@ export default function ImageEditorPage() {
   const [brightness, setBrightness] = useState(100);
   const [contrast, setContrast] = useState(100);
   const [saturation, setSaturation] = useState(100);
-  const [rotation, setRotation] = useState(0); // 0, 90, 180, 270
+  const [rotation, setRotation] = useState(0);
   const [flipH, setFlipH] = useState(false);
   const [flipV, setFlipV] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -77,9 +77,7 @@ export default function ImageEditorPage() {
     setWidth(v);
     if (keepRatio && natural && v) {
       const n = parseInt(v, 10);
-      if (!Number.isNaN(n)) {
-        setHeight(String(Math.round((n / natural.w) * natural.h)));
-      }
+      if (!Number.isNaN(n)) setHeight(String(Math.round((n / natural.w) * natural.h)));
     }
   };
 
@@ -87,9 +85,7 @@ export default function ImageEditorPage() {
     setHeight(v);
     if (keepRatio && natural && v) {
       const n = parseInt(v, 10);
-      if (!Number.isNaN(n)) {
-        setWidth(String(Math.round((n / natural.h) * natural.w)));
-      }
+      if (!Number.isNaN(n)) setWidth(String(Math.round((n / natural.h) * natural.w)));
     }
   };
 
@@ -104,7 +100,6 @@ export default function ImageEditorPage() {
       const outW = parseInt(width, 10) || srcW;
       const outH = parseInt(height, 10) || srcH;
 
-      // Swap output dims if rotation is 90/270
       const rotated90 = rotation === 90 || rotation === 270;
       const finalW = rotated90 ? outH : outW;
       const finalH = rotated90 ? outW : outH;
@@ -126,11 +121,7 @@ export default function ImageEditorPage() {
       const q = isPng ? undefined : 0.92;
 
       const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob(
-          (b) => (b ? resolve(b) : reject(new Error("toBlob failed"))),
-          mime,
-          q
-        );
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), mime, q);
       });
 
       const baseName = file.name.replace(/\.[^.]+$/, "");
@@ -170,9 +161,7 @@ export default function ImageEditorPage() {
         <div className="space-y-4">
           <div className="overflow-hidden rounded-xl border border-border bg-muted/30">
             <div className="flex items-center justify-between border-b border-border px-4 py-2">
-              <span className="truncate text-sm font-medium text-foreground">
-                {file.name}
-              </span>
+              <span className="truncate text-sm font-medium text-foreground">{file.name}</span>
               <button
                 onClick={() => {
                   setFile(null);
@@ -221,9 +210,7 @@ export default function ImageEditorPage() {
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-foreground">
-                    Width (px)
-                  </label>
+                  <label className="mb-1 block text-xs font-medium text-foreground">Width (px)</label>
                   <input
                     type="number"
                     value={width}
@@ -233,9 +220,7 @@ export default function ImageEditorPage() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-foreground">
-                    Height (px)
-                  </label>
+                  <label className="mb-1 block text-xs font-medium text-foreground">Height (px)</label>
                   <input
                     type="number"
                     value={height}
@@ -255,9 +240,7 @@ export default function ImageEditorPage() {
                 Keep aspect ratio
               </label>
               <div>
-                <p className="mb-1.5 text-xs font-medium text-muted-foreground">
-                  Quick presets
-                </p>
+                <p className="mb-1.5 text-xs font-medium text-muted-foreground">Quick presets</p>
                 <div className="flex flex-wrap gap-2">
                   {[
                     { w: "1920", h: "1080", label: "1080p" },
@@ -285,24 +268,9 @@ export default function ImageEditorPage() {
           {tab === "adjust" && (
             <div className="space-y-4">
               {[
-                {
-                  icon: Sun,
-                  label: "Brightness",
-                  value: brightness,
-                  set: setBrightness,
-                },
-                {
-                  icon: Contrast,
-                  label: "Contrast",
-                  value: contrast,
-                  set: setContrast,
-                },
-                {
-                  icon: Droplets,
-                  label: "Saturation",
-                  value: saturation,
-                  set: setSaturation,
-                },
+                { icon: Sun, label: "Brightness", value: brightness, set: setBrightness },
+                { icon: Contrast, label: "Contrast", value: contrast, set: setContrast },
+                { icon: Droplets, label: "Saturation", value: saturation, set: setSaturation },
               ].map(({ icon: Icon, label, value, set }) => (
                 <div key={label}>
                   <div className="mb-1.5 flex items-center justify-between">
@@ -310,9 +278,7 @@ export default function ImageEditorPage() {
                       <Icon className="h-4 w-4" />
                       {label}
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {value}%
-                    </span>
+                    <span className="text-xs text-muted-foreground">{value}%</span>
                   </div>
                   <input
                     type="range"
@@ -383,9 +349,7 @@ export default function ImageEditorPage() {
           {error && (
             <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-              <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-                {error}
-              </p>
+              <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
             </div>
           )}
 

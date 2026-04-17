@@ -38,7 +38,6 @@ export default function SvgToPngPage() {
       const svgText = await file.text();
       setProgress(30);
 
-      // Parse SVG to get natural dimensions
       const parser = new DOMParser();
       const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
       const svgEl = svgDoc.documentElement;
@@ -46,7 +45,6 @@ export default function SvgToPngPage() {
         throw new Error("Invalid SVG file.");
       }
 
-      // Determine base dimensions
       let baseW =
         parseFloat(svgEl.getAttribute("width") ?? "") ||
         (svgEl.getAttribute("viewBox")?.split(/\s+/)?.[2]
@@ -65,7 +63,6 @@ export default function SvgToPngPage() {
 
       setProgress(50);
 
-      // Render SVG via image + canvas
       const blob = new Blob([svgText], { type: "image/svg+xml" });
       const url = URL.createObjectURL(blob);
 
@@ -87,15 +84,11 @@ export default function SvgToPngPage() {
         ctx.fillRect(0, 0, outW, outH);
       }
       ctx.drawImage(img, 0, 0, outW, outH);
-
       URL.revokeObjectURL(url);
       setProgress(80);
 
       const pngBlob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob(
-          (b) => (b ? resolve(b) : reject(new Error("toBlob failed"))),
-          "image/png"
-        );
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png");
       });
       setProgress(100);
 
@@ -122,16 +115,10 @@ export default function SvgToPngPage() {
       description="Convert SVG vector files to high-quality PNG raster images."
     >
       {!file ? (
-        <Dropzone
-          accept=".svg,image/svg+xml"
-          multiple={false}
-          onFiles={handleFiles}
-        >
+        <Dropzone accept=".svg,image/svg+xml" multiple={false} onFiles={handleFiles}>
           <div className="flex flex-col items-center gap-2 py-4">
             <FileImage className="h-8 w-8 text-muted-foreground" />
-            <p className="text-sm font-medium text-foreground">
-              Drop an SVG file here
-            </p>
+            <p className="text-sm font-medium text-foreground">Drop an SVG file here</p>
           </div>
         </Dropzone>
       ) : (
@@ -202,9 +189,7 @@ export default function SvgToPngPage() {
       {error && (
         <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-            {error}
-          </p>
+          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
         </div>
       )}
 

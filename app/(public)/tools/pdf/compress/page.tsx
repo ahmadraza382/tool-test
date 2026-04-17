@@ -20,10 +20,7 @@ export default function CompressPdfPage() {
   const [progress, setProgress] = useState(0);
   const [progressLabel, setProgressLabel] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [resultSize, setResultSize] = useState<{
-    before: number;
-    after: number;
-  } | null>(null);
+  const [resultSize, setResultSize] = useState<{ before: number; after: number } | null>(null);
 
   const handleFiles = (files: File[]) => {
     const pdf = files.find((f) => f.type === "application/pdf");
@@ -51,16 +48,13 @@ export default function CompressPdfPage() {
       const sourcePdf = await pdfjs.getDocument({ data: originalBytes }).promise;
       const totalPages = sourcePdf.numPages;
 
-      // Compression params per quality
       const scale = quality === "high" ? 2 : quality === "medium" ? 1.4 : 1;
-      const jpegQuality =
-        quality === "high" ? 0.9 : quality === "medium" ? 0.7 : 0.5;
+      const jpegQuality = quality === "high" ? 0.9 : quality === "medium" ? 0.7 : 0.5;
 
       const newPdf = await PDFDocument.create();
 
       for (let i = 1; i <= totalPages; i++) {
         setProgressLabel(`Compressing page ${i} of ${totalPages}...`);
-        // Render page to canvas
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const page = (await sourcePdf.getPage(i)) as any;
         const viewport = page.getViewport({ scale });
@@ -71,28 +65,15 @@ export default function CompressPdfPage() {
         if (!ctx) throw new Error("Canvas context unavailable");
         await page.render({ canvasContext: ctx, viewport, canvas }).promise;
 
-        // Convert to JPEG blob
         const blob = await new Promise<Blob>((resolve, reject) => {
-          canvas.toBlob(
-            (b) =>
-              b ? resolve(b) : reject(new Error("Canvas toBlob failed")),
-            "image/jpeg",
-            jpegQuality
-          );
+          canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/jpeg", jpegQuality);
         });
-
         const jpegBytes = new Uint8Array(await blob.arrayBuffer());
         const embedded = await newPdf.embedJpg(jpegBytes);
 
-        // Preserve original page size
         const origPage = page.getViewport({ scale: 1 });
         const pdfPage = newPdf.addPage([origPage.width, origPage.height]);
-        pdfPage.drawImage(embedded, {
-          x: 0,
-          y: 0,
-          width: origPage.width,
-          height: origPage.height,
-        });
+        pdfPage.drawImage(embedded, { x: 0, y: 0, width: origPage.width, height: origPage.height });
 
         setProgress(Math.round((i / totalPages) * 90));
       }
@@ -101,9 +82,7 @@ export default function CompressPdfPage() {
       const outBytes = await newPdf.save();
       setProgress(100);
 
-      const blob = new Blob([outBytes as BlobPart], {
-        type: "application/pdf",
-      });
+      const blob = new Blob([outBytes as BlobPart], { type: "application/pdf" });
       setResultSize({ before: file.size, after: blob.size });
 
       const baseName = file.name.replace(/\.pdf$/i, "");
@@ -125,21 +104,9 @@ export default function CompressPdfPage() {
   };
 
   const qualities: { value: Quality; label: string; desc: string }[] = [
-    {
-      value: "high",
-      label: "High Quality",
-      desc: "Less compression, best quality",
-    },
-    {
-      value: "medium",
-      label: "Balanced",
-      desc: "Good compression, good quality",
-    },
-    {
-      value: "low",
-      label: "Maximum",
-      desc: "Smallest file, reduced quality",
-    },
+    { value: "high", label: "High Quality", desc: "Less compression, best quality" },
+    { value: "medium", label: "Balanced", desc: "Good compression, good quality" },
+    { value: "low", label: "Maximum", desc: "Smallest file, reduced quality" },
   ];
 
   return (
@@ -174,9 +141,7 @@ export default function CompressPdfPage() {
       )}
 
       <div className="space-y-3">
-        <h3 className="text-sm font-medium text-foreground">
-          Compression Level
-        </h3>
+        <h3 className="text-sm font-medium text-foreground">Compression Level</h3>
         <div className="grid gap-2 sm:grid-cols-3">
           {qualities.map((q) => (
             <button
@@ -202,10 +167,7 @@ export default function CompressPdfPage() {
           <p className="text-xs leading-relaxed text-green-700 dark:text-green-300">
             Compressed: {(resultSize.before / 1024 / 1024).toFixed(2)} MB →{" "}
             {(resultSize.after / 1024 / 1024).toFixed(2)} MB (
-            {Math.round(
-              ((resultSize.before - resultSize.after) / resultSize.before) * 100
-            )}
-            % smaller)
+            {Math.round(((resultSize.before - resultSize.after) / resultSize.before) * 100)}% smaller)
           </p>
         </div>
       )}
@@ -213,9 +175,7 @@ export default function CompressPdfPage() {
       {error && (
         <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-            {error}
-          </p>
+          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
         </div>
       )}
 

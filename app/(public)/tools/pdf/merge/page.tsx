@@ -67,9 +67,7 @@ export default function MergePdfPage() {
       const pdfBytes = await mergedPdf.save();
       setProgress(100);
 
-      const blob = new Blob([pdfBytes as BlobPart], {
-        type: "application/pdf",
-      });
+      const blob = new Blob([pdfBytes as BlobPart], { type: "application/pdf" });
       downloadBlob(blob, "merged.pdf");
 
       setProgressLabel("Done!");
@@ -80,9 +78,7 @@ export default function MergePdfPage() {
       }, 800);
     } catch (err) {
       console.error(err);
-      setError(
-        err instanceof Error ? err.message : "Failed to merge PDFs."
-      );
+      setError(err instanceof Error ? err.message : "Failed to merge PDFs.");
       setProcessing(false);
       setProgress(0);
       setProgressLabel("");

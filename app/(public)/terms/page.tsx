@@ -2,9 +2,9 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Terms of Service — ToolboxHub",
+  title: "Terms of Service — Tooldit",
   description:
-    "The terms that govern your use of ToolboxHub. Free to use, no warranty, use responsibly.",
+    "The terms that govern your use of Tooldit. Free to use, no warranty, use responsibly.",
 };
 
 export default function TermsPage() {
@@ -29,7 +29,7 @@ export default function TermsPage() {
         <section>
           <p>
             These Terms of Service (&quot;Terms&quot;) govern your access to and
-            use of ToolboxHub (the &quot;Service&quot;). By using the Service,
+            use of Tooldit (the &quot;Service&quot;). By using the Service,
             you agree to these Terms. If you do not agree, do not use the
             Service.
           </p>
@@ -40,7 +40,7 @@ export default function TermsPage() {
             Use of the Service
           </h2>
           <p className="text-muted-foreground">
-            ToolboxHub provides free, browser-based utilities for working with
+            Tooldit provides free, browser-based utilities for working with
             PDFs, images, and similar files. You may use the Service for any
             lawful purpose, personal or commercial.
           </p>
@@ -79,8 +79,8 @@ export default function TermsPage() {
             Intellectual Property
           </h2>
           <p className="text-muted-foreground">
-            The ToolboxHub name, logo, and site design are the property of
-            ToolboxHub. The underlying source code and content are protected by
+            The Tooldit name, logo, and site design are the property of
+            Tooldit. The underlying source code and content are protected by
             copyright and other intellectual-property laws.
           </p>
         </section>
@@ -103,7 +103,7 @@ export default function TermsPage() {
             Limitation of Liability
           </h2>
           <p className="text-muted-foreground">
-            To the fullest extent permitted by law, ToolboxHub shall not be
+            To the fullest extent permitted by law, Tooldit shall not be
             liable for any indirect, incidental, special, consequential, or
             punitive damages, including loss of data or profits, arising out of
             your use of the Service — even if we have been advised of the
@@ -140,7 +140,7 @@ export default function TermsPage() {
           </h2>
           <p className="text-muted-foreground">
             These Terms are governed by the laws of the jurisdiction in which
-            ToolboxHub is operated, without regard to conflict-of-law
+            Tooldit is operated, without regard to conflict-of-law
             principles.
           </p>
         </section>

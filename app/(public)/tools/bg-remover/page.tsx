@@ -48,16 +48,13 @@ export default function BgRemoverPage() {
     setError(null);
 
     try {
-      const { removeBackground } = await import(
-        "@imgly/background-removal"
-      );
+      const { removeBackground } = await import("@imgly/background-removal");
 
       setProgressLabel("Removing background...");
       setProgress(25);
 
       const blob = await removeBackground(file, {
         progress: (_key, current, total) => {
-          // Scale 25-95 during model processing
           const pct = total > 0 ? (current / total) * 70 + 25 : 25;
           setProgress(Math.min(95, Math.round(pct)));
         },
@@ -75,11 +72,7 @@ export default function BgRemoverPage() {
       }, 600);
     } catch (err) {
       console.error(err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to remove background. Try again."
-      );
+      setError(err instanceof Error ? err.message : "Failed to remove background.");
       setProcessing(false);
       setProgress(0);
       setProgressLabel("");
@@ -163,9 +156,7 @@ export default function BgRemoverPage() {
           {error && (
             <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-              <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-                {error}
-              </p>
+              <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
             </div>
           )}
 

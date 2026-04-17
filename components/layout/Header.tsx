@@ -22,7 +22,9 @@ export function Header() {
         <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
           <Wrench className="h-3.5 w-3.5 text-primary-foreground" />
         </div>
-        <span className="text-base font-bold tracking-tight">ToolboxHub</span>
+        <span className="text-base font-bold tracking-tight">
+          Tool<span className="text-primary">dit</span>
+        </span>
       </Link>
 
       <div className="ml-auto">

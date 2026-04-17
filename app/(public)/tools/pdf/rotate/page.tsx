@@ -66,9 +66,7 @@ export default function RotatePdfPage() {
           : parsePages(pages, total);
 
       if (targetIndices.size === 0) {
-        throw new Error(
-          `No valid pages selected. PDF has ${total} pages.`
-        );
+        throw new Error(`No valid pages selected. PDF has ${total} pages.`);
       }
 
       setProgress(20);
@@ -88,9 +86,7 @@ export default function RotatePdfPage() {
       const outBytes = await pdf.save();
       setProgress(100);
 
-      const blob = new Blob([outBytes as BlobPart], {
-        type: "application/pdf",
-      });
+      const blob = new Blob([outBytes as BlobPart], { type: "application/pdf" });
       const baseName = file.name.replace(/\.pdf$/i, "");
       downloadBlob(blob, `${baseName}-rotated.pdf`);
 
@@ -125,10 +121,7 @@ export default function RotatePdfPage() {
             <p className="text-sm font-medium text-foreground">{file.name}</p>
           </div>
           <button
-            onClick={() => {
-              setFile(null);
-              setError(null);
-            }}
+            onClick={() => setFile(null)}
             className="text-xs text-muted-foreground hover:text-foreground"
           >
             Change
@@ -149,10 +142,7 @@ export default function RotatePdfPage() {
                   : "border-border text-muted-foreground hover:border-primary/30"
               }`}
             >
-              <RotateCw
-                className="h-4 w-4"
-                style={{ transform: `rotate(${deg}deg)` }}
-              />
+              <RotateCw className="h-4 w-4" style={{ transform: `rotate(${deg}deg)` }} />
               {deg}°
             </button>
           ))}
@@ -199,19 +189,13 @@ export default function RotatePdfPage() {
       {error && (
         <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-            {error}
-          </p>
+          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
         </div>
       )}
 
       <button
         onClick={handleRotate}
-        disabled={
-          !file ||
-          processing ||
-          (applyTo === "custom" && !pages.trim())
-        }
+        disabled={!file || processing || (applyTo === "custom" && !pages.trim())}
         className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <DownloadIcon className="h-4 w-4" />

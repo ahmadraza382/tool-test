@@ -59,7 +59,6 @@ export default function ObjectRemoverPage() {
     }
   };
 
-  // Load image into the image canvas
   useEffect(() => {
     if (!preview || !imageCanvasRef.current || !maskCanvasRef.current) return;
 
@@ -80,7 +79,6 @@ export default function ObjectRemoverPage() {
 
       const ctx = imgCanvas.getContext("2d");
       if (ctx) ctx.drawImage(img, 0, 0, w, h);
-
       const mctx = maskCanvas.getContext("2d");
       if (mctx) mctx.clearRect(0, 0, w, h);
       setHasMask(false);
@@ -138,9 +136,7 @@ export default function ObjectRemoverPage() {
   };
 
   const handleRemove = async () => {
-    if (!imgRef.current || !imageCanvasRef.current || !maskCanvasRef.current) {
-      return;
-    }
+    if (!imgRef.current || !imageCanvasRef.current || !maskCanvasRef.current) return;
     setProcessing(true);
     setProgress(5);
     setError(null);
@@ -159,19 +155,14 @@ export default function ObjectRemoverPage() {
       const maskData = maskCtx.getImageData(0, 0, w, h);
       setProgress(20);
 
-      // Identify masked pixels (alpha > 0 in mask)
       const maskSet = new Set<number>();
       for (let i = 0; i < maskData.data.length; i += 4) {
         if (maskData.data[i + 3] > 20) maskSet.add(i / 4);
       }
 
-      if (maskSet.size === 0) {
-        throw new Error("Paint over the object to remove first.");
-      }
+      if (maskSet.size === 0) throw new Error("Paint over the object to remove first.");
 
       setProgress(35);
-      // Simple inpainting: for each masked pixel, sample from nearest
-      // unmasked pixels using expanding search radius and average.
       const out = new Uint8ClampedArray(imgData.data);
       const maskedIndices = Array.from(maskSet);
       const total = maskedIndices.length;
@@ -180,13 +171,8 @@ export default function ObjectRemoverPage() {
       for (const idx of maskedIndices) {
         const px = idx % w;
         const py = Math.floor(idx / w);
+        let r = 0, g = 0, b = 0, count = 0;
 
-        let r = 0,
-          g = 0,
-          b = 0,
-          count = 0;
-
-        // Expanding ring search up to 50px radius
         for (let radius = 2; radius <= 50 && count < 12; radius += 3) {
           for (let dy = -radius; dy <= radius; dy += 2) {
             for (let dx = -radius; dx <= radius; dx += 2) {
@@ -215,9 +201,7 @@ export default function ObjectRemoverPage() {
 
         done++;
         if (done % 500 === 0) {
-          const pct = 35 + Math.round((done / total) * 50);
-          setProgress(Math.min(85, pct));
-          // Yield to UI
+          setProgress(Math.min(85, 35 + Math.round((done / total) * 50)));
           await new Promise((r) => setTimeout(r, 0));
         }
       }
@@ -231,10 +215,7 @@ export default function ObjectRemoverPage() {
       rctx.putImageData(new ImageData(out, w, h), 0, 0);
 
       const blob = await new Promise<Blob>((resolve, reject) => {
-        resultCanvas.toBlob(
-          (b) => (b ? resolve(b) : reject(new Error("toBlob failed"))),
-          "image/png"
-        );
+        resultCanvas.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), "image/png");
       });
 
       if (resultUrl) URL.revokeObjectURL(resultUrl);
@@ -281,9 +262,7 @@ export default function ObjectRemoverPage() {
         <Dropzone accept="image/*" multiple={false} onFiles={handleFiles}>
           <div className="flex flex-col items-center gap-2 py-6">
             <ImageIcon className="h-10 w-10 text-muted-foreground" />
-            <p className="text-sm font-medium text-foreground">
-              Drop an image here
-            </p>
+            <p className="text-sm font-medium text-foreground">Drop an image here</p>
             <p className="text-xs text-muted-foreground">
               Then paint over objects you want removed
             </p>
@@ -291,7 +270,6 @@ export default function ObjectRemoverPage() {
         </Dropzone>
       ) : (
         <div className="space-y-4">
-          {/* Toolbar */}
           <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-card px-3 py-2">
             <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
               <Paintbrush className="h-4 w-4" />
@@ -311,10 +289,7 @@ export default function ObjectRemoverPage() {
                 >
                   <span
                     className="rounded-full bg-current"
-                    style={{
-                      width: `${b.size / 4}px`,
-                      height: `${b.size / 4}px`,
-                    }}
+                    style={{ width: `${b.size / 4}px`, height: `${b.size / 4}px` }}
                   />
                   {b.label}
                 </button>
@@ -330,7 +305,6 @@ export default function ObjectRemoverPage() {
             </button>
           </div>
 
-          {/* Canvas area */}
           <div className="overflow-hidden rounded-xl border border-border">
             <div className="flex items-center justify-between border-b border-border px-4 py-2">
               <span className="text-sm font-medium text-foreground">
@@ -354,17 +328,10 @@ export default function ObjectRemoverPage() {
             <div className="relative flex items-center justify-center bg-muted/30 p-4">
               {resultUrl ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={resultUrl}
-                  alt="Result"
-                  className="max-h-80 rounded-md object-contain"
-                />
+                <img src={resultUrl} alt="Result" className="max-h-80 rounded-md object-contain" />
               ) : (
                 <div className="relative">
-                  <canvas
-                    ref={imageCanvasRef}
-                    className="max-h-80 rounded-md"
-                  />
+                  <canvas ref={imageCanvasRef} className="max-h-80 rounded-md" />
                   <canvas
                     ref={maskCanvasRef}
                     onPointerDown={onPointerDown}
@@ -391,9 +358,7 @@ export default function ObjectRemoverPage() {
           {error && (
             <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-              <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-                {error}
-              </p>
+              <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
             </div>
           )}
 
@@ -423,11 +388,7 @@ export default function ObjectRemoverPage() {
               disabled={!hasMask || processing}
               className="h-11 w-full rounded-xl bg-primary font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {processing
-                ? "Processing..."
-                : hasMask
-                  ? "Remove Selected Objects"
-                  : "Paint over objects first"}
+              {processing ? "Processing..." : hasMask ? "Remove Selected Objects" : "Paint over objects first"}
             </button>
           )}
         </div>

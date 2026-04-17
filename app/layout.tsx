@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "ToolboxHub — Free Online PDF & Image Tools",
-    template: "%s | ToolboxHub",
+    default: "Tooldit — Free Online PDF & Image Tools",
+    template: "%s | Tooldit",
   },
   description:
     "Free, private, browser-based PDF and image tools. Merge, split, compress PDFs. Convert, edit, and enhance images. No uploads, no ads, no data collection.",
@@ -43,7 +45,11 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="min-h-screen bg-background font-sans antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <Navbar />
+          {children}
+          <Footer/>
+          </ThemeProvider>
       </body>
     </html>
   );

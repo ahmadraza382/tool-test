@@ -31,7 +31,6 @@ export default function SplitPdfPage() {
   };
 
   const parseRange = (input: string, total: number): number[] => {
-    // Returns 1-based page numbers
     const parts = input.split(",").map((s) => s.trim()).filter(Boolean);
     const set = new Set<number>();
     for (const part of parts) {
@@ -62,44 +61,32 @@ export default function SplitPdfPage() {
       const source = await PDFDocument.load(bytes, { ignoreEncryption: true });
       const total = source.getPageCount();
       const baseName = file.name.replace(/\.pdf$/i, "");
-
       setProgress(10);
 
       if (mode === "range" || mode === "extract") {
         const pages = parseRange(pageRange, total);
         if (pages.length === 0) {
-          throw new Error(
-            `No valid pages. PDF has ${total} pages. Try a valid range like "1-${total}".`
-          );
+          throw new Error(`No valid pages. PDF has ${total} pages.`);
         }
 
         setProgressLabel(`Extracting ${pages.length} pages...`);
         const outDoc = await PDFDocument.create();
-        const copied = await outDoc.copyPages(
-          source,
-          pages.map((p) => p - 1)
-        );
+        const copied = await outDoc.copyPages(source, pages.map((p) => p - 1));
         copied.forEach((p) => outDoc.addPage(p));
         setProgress(80);
 
         const outBytes = await outDoc.save();
         setProgress(100);
-
-        const blob = new Blob([outBytes as BlobPart], {
-          type: "application/pdf",
-        });
+        const blob = new Blob([outBytes as BlobPart], { type: "application/pdf" });
         downloadBlob(blob, `${baseName}-pages.pdf`);
-      } else if (mode === "every") {
+      } else {
         const chunkSize = parseInt(pageRange, 10);
         if (Number.isNaN(chunkSize) || chunkSize < 1) {
-          throw new Error("Enter a valid chunk size (e.g. 2).");
+          throw new Error("Enter a valid chunk size.");
         }
-
         const totalChunks = Math.ceil(total / chunkSize);
         for (let c = 0; c < totalChunks; c++) {
-          setProgressLabel(
-            `Creating chunk ${c + 1} of ${totalChunks}...`
-          );
+          setProgressLabel(`Creating chunk ${c + 1} of ${totalChunks}...`);
           const outDoc = await PDFDocument.create();
           const start = c * chunkSize;
           const end = Math.min(start + chunkSize, total);
@@ -108,17 +95,10 @@ export default function SplitPdfPage() {
           const copied = await outDoc.copyPages(source, indices);
           copied.forEach((p) => outDoc.addPage(p));
           const outBytes = await outDoc.save();
-          const blob = new Blob([outBytes as BlobPart], {
-            type: "application/pdf",
-          });
-          downloadBlob(
-            blob,
-            `${baseName}-part-${String(c + 1).padStart(2, "0")}.pdf`
-          );
+          const blob = new Blob([outBytes as BlobPart], { type: "application/pdf" });
+          downloadBlob(blob, `${baseName}-part-${String(c + 1).padStart(2, "0")}.pdf`);
           setProgress(Math.round(((c + 1) / totalChunks) * 100));
-          if (c < totalChunks - 1) {
-            await new Promise((r) => setTimeout(r, 250));
-          }
+          if (c < totalChunks - 1) await new Promise((r) => setTimeout(r, 250));
         }
       }
 
@@ -138,21 +118,9 @@ export default function SplitPdfPage() {
   };
 
   const modes: { value: SplitMode; label: string; desc: string }[] = [
-    {
-      value: "range",
-      label: "Page Range",
-      desc: "Extract a range of pages (e.g. 1-5)",
-    },
-    {
-      value: "extract",
-      label: "Extract Pages",
-      desc: "Pick specific pages (e.g. 1,3,5)",
-    },
-    {
-      value: "every",
-      label: "Split Every N",
-      desc: "Split into chunks of N pages",
-    },
+    { value: "range", label: "Page Range", desc: "Extract a range of pages (e.g. 1-5)" },
+    { value: "extract", label: "Extract Pages", desc: "Pick specific pages (e.g. 1,3,5)" },
+    { value: "every", label: "Split Every N", desc: "Split into chunks of N pages" },
   ];
 
   return (
@@ -174,10 +142,7 @@ export default function SplitPdfPage() {
             </p>
           </div>
           <button
-            onClick={() => {
-              setFile(null);
-              setError(null);
-            }}
+            onClick={() => setFile(null)}
             className="text-xs text-muted-foreground hover:text-foreground"
           >
             Change
@@ -207,23 +172,13 @@ export default function SplitPdfPage() {
 
       <div>
         <label className="mb-1.5 block text-sm font-medium text-foreground">
-          {mode === "range"
-            ? "Page Range"
-            : mode === "extract"
-              ? "Page Numbers"
-              : "Pages per chunk"}
+          {mode === "range" ? "Page Range" : mode === "extract" ? "Page Numbers" : "Pages per chunk"}
         </label>
         <input
           type="text"
           value={pageRange}
           onChange={(e) => setPageRange(e.target.value)}
-          placeholder={
-            mode === "range"
-              ? "e.g. 1-5"
-              : mode === "extract"
-                ? "e.g. 1,3,5,8"
-                : "e.g. 2"
-          }
+          placeholder={mode === "range" ? "e.g. 1-5" : mode === "extract" ? "e.g. 1,3,5,8" : "e.g. 2"}
           className="h-10 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
       </div>
@@ -233,9 +188,7 @@ export default function SplitPdfPage() {
       {error && (
         <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-            {error}
-          </p>
+          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
         </div>
       )}
 

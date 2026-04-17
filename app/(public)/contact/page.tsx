@@ -2,9 +2,9 @@ import Link from "next/link";
 import { ArrowLeft, Mail, MessageSquare, Bug, Lightbulb } from "lucide-react";
 
 export const metadata = {
-  title: "Contact Us — ToolboxHub",
+  title: "Contact Us — Tooldit",
   description:
-    "Get in touch with the ToolboxHub team. Feedback, bug reports, and feature requests welcome.",
+    "Get in touch with the Tooldit team. Feedback, bug reports, and feature requests welcome.",
 };
 
 export default function ContactPage() {

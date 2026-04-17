@@ -49,7 +49,6 @@ export default function PasswordPdfPage() {
       setProgress(50);
       setProgressLabel("Applying password protection...");
 
-      // Encrypt with user + owner password. Permissions control what users can do.
       pdf.encrypt({
         userPassword: password,
         ownerPassword: password,
@@ -69,9 +68,7 @@ export default function PasswordPdfPage() {
       const outBytes = await pdf.save();
       setProgress(100);
 
-      const blob = new Blob([outBytes as BlobPart], {
-        type: "application/pdf",
-      });
+      const blob = new Blob([outBytes as BlobPart], { type: "application/pdf" });
       const baseName = file.name.replace(/\.pdf$/i, "");
       downloadBlob(blob, `${baseName}-protected.pdf`);
 
@@ -83,9 +80,7 @@ export default function PasswordPdfPage() {
       }, 800);
     } catch (err) {
       console.error(err);
-      setError(
-        err instanceof Error ? err.message : "Failed to protect PDF."
-      );
+      setError(err instanceof Error ? err.message : "Failed to protect PDF.");
       setProcessing(false);
       setProgress(0);
       setProgressLabel("");
@@ -136,11 +131,7 @@ export default function PasswordPdfPage() {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
           >
-            {showPassword ? (
-              <EyeOff className="h-4 w-4" />
-            ) : (
-              <Eye className="h-4 w-4" />
-            )}
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
         <p className="mt-1.5 text-xs text-muted-foreground">
@@ -186,9 +177,7 @@ export default function PasswordPdfPage() {
       {error && (
         <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/20 dark:bg-red-500/5">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">
-            {error}
-          </p>
+          <p className="text-xs leading-relaxed text-red-700 dark:text-red-300">{error}</p>
         </div>
       )}
 

@@ -102,7 +102,6 @@ export default function HomePage() {
                   href={tool.href}
                   className="group relative overflow-hidden rounded-2xl border border-border bg-card p-3.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/5 sm:p-5"
                 >
-                  {/* Icon */}
                   <div
                     className={cn(
                       "mb-3 flex h-10 w-10 items-center justify-center rounded-xl transition-transform group-hover:scale-110 sm:mb-4 sm:h-12 sm:w-12",
@@ -111,8 +110,6 @@ export default function HomePage() {
                   >
                     <ToolIcon className="h-5 w-5 sm:h-5.5 sm:w-5.5" />
                   </div>
-
-                  {/* Text */}
                   <h3 className="text-sm font-semibold leading-tight text-card-foreground sm:text-base">
                     {tool.name}
                   </h3>
@@ -120,13 +117,11 @@ export default function HomePage() {
                     {tool.description}
                   </p>
 
-                  {/* Hover arrow */}
                   <div className="mt-4 hidden items-center gap-1 text-sm font-medium text-primary opacity-0 transition-all group-hover:opacity-100 sm:flex">
                     Open tool
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                   </div>
 
-                  {/* Subtle gradient border glow on hover */}
                   <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity group-hover:opacity-100">
                     <div className="absolute -inset-px rounded-2xl bg-linear-to-br from-primary/10 via-transparent to-sky-400/10" />
                   </div>
@@ -224,10 +219,7 @@ export default function HomePage() {
               { n: 2, title: "Upload Your File" },
               { n: 3, title: "Download Result" },
             ].map(({ n, title }) => (
-              <div
-                key={n}
-                className="relative flex flex-col items-center"
-              >
+              <div key={n} className="relative flex flex-col items-center">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground shadow-lg shadow-primary/30">
                   {n}
                 </div>
